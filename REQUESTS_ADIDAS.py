@@ -9,7 +9,7 @@ task_count = input('Enter number of tasks: ')
 
 print ('Starting', + int(task_count), 'tasks...')
 
-def main():
+def main(i):
     s = requests.Session()
     url = 'https://www.adidas.com/yeezy'
     headers = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko), Chrome/68.0.3440.106 Safari/537.36',
@@ -20,11 +20,11 @@ def main():
     status_checker = True
     while status_checker:
         if 'WAITING' in soup.text:
-            print ('Waiting in Splash...')
+            print ('Task %d: Waiting in Splash...' % i)
             time.sleep(2)
             pass
         else:
-            print ('Past Splash! Opening Chrome Instance!')
+            print ('Task %d: Past Splash! Opening Chrome Instance!' % i)
             chrome_options = Options()
             chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
             driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -38,7 +38,6 @@ def main():
 
 
 for i in range(int(task_count)):
-    t = threading.Thread(target=main)
-    time.sleep(3)
+    t = threading.Thread(target=main, args=(i,))
     t.start()
 
